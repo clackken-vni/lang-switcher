@@ -2,7 +2,6 @@
 
 namespace Vnideas\LangSwitcher;
 
-use Filament\Facades\Filament;
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
 use Filament\Support\Assets\Css;
@@ -109,8 +108,8 @@ class LangSwitcherServiceProvider extends PackageServiceProvider
     {
         return [
             // AlpineComponent::make('lang-switcher', __DIR__ . '/../resources/dist/components/lang-switcher.js'),
-//            Css::make('lang-switcher-styles', __DIR__ . '/../resources/dist/lang-switcher.css'),
-//            Js::make('lang-switcher-scripts', __DIR__ . '/../resources/dist/lang-switcher.js'),
+            //            Css::make('lang-switcher-styles', __DIR__ . '/../resources/dist/lang-switcher.css'),
+            //            Js::make('lang-switcher-scripts', __DIR__ . '/../resources/dist/lang-switcher.js'),
         ];
     }
 

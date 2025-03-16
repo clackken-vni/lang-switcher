@@ -21,8 +21,10 @@ class LangSwitcherPlugin implements Plugin
 
     public function boot(Panel $panel): void
     {
-        $panel->renderHook('panels::user-menu.before',
-            fn(): string => view('lang-switcher::dropdown')->render());
+        $panel->renderHook(
+            'panels::user-menu.before',
+            fn (): string => view('lang-switcher::dropdown')->render()
+        );
         $panel->routes['lang-switcher'] = [
             Route::get('/lang/{lang}', static function ($lang) {
                 if (in_array($lang, json_decode(VniOption::where('option_name', 'langs_enabled')
@@ -30,8 +32,9 @@ class LangSwitcherPlugin implements Plugin
                     session()->put('locale', $lang);
                     app()->setLocale($lang);
                 }
+
                 return redirect()->back();
-            })->name('lang.switch')
+            })->name('lang.switch'),
         ];
     }
 
