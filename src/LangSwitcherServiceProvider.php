@@ -1,7 +1,8 @@
 <?php
 
-namespace VendorName\Skeleton;
+namespace Vnideas\LangSwitcher;
 
+use Filament\Facades\Filament;
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
 use Filament\Support\Assets\Css;
@@ -13,14 +14,14 @@ use Livewire\Features\SupportTesting\Testable;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use VendorName\Skeleton\Commands\SkeletonCommand;
-use VendorName\Skeleton\Testing\TestsSkeleton;
+use Vnideas\LangSwitcher\Commands\LangSwitcherCommand;
+use Vnideas\LangSwitcher\Testing\TestsLangSwitcher;
 
-class SkeletonServiceProvider extends PackageServiceProvider
+class LangSwitcherServiceProvider extends PackageServiceProvider
 {
-    public static string $name = 'skeleton';
+    public static string $name = 'lang-switcher';
 
-    public static string $viewNamespace = 'skeleton';
+    public static string $viewNamespace = 'lang-switcher';
 
     public function configurePackage(Package $package): void
     {
@@ -31,12 +32,14 @@ class SkeletonServiceProvider extends PackageServiceProvider
          */
         $package->name(static::$name)
             ->hasCommands($this->getCommands())
+            ->hasAssets()
             ->hasInstallCommand(function (InstallCommand $command) {
                 $command
+                    ->publishAssets()
                     ->publishConfigFile()
                     ->publishMigrations()
                     ->askToRunMigrations()
-                    ->askToStarRepoOnGitHub(':vendor_slug/:package_slug');
+                    ->askToStarRepoOnGitHub('vnideas/lang-switcher');
             });
 
         $configFileName = $package->shortName();
@@ -62,6 +65,11 @@ class SkeletonServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
+        // Publish CSS
+        $this->publishes([
+            __DIR__ . '/../resources/css' => public_path('vendor/lang-switcher/css'),
+        ], 'lang-switcher-assets');
+
         // Asset Registration
         FilamentAsset::register(
             $this->getAssets(),
@@ -80,18 +88,18 @@ class SkeletonServiceProvider extends PackageServiceProvider
         if (app()->runningInConsole()) {
             foreach (app(Filesystem::class)->files(__DIR__ . '/../stubs/') as $file) {
                 $this->publishes([
-                    $file->getRealPath() => base_path("stubs/skeleton/{$file->getFilename()}"),
-                ], 'skeleton-stubs');
+                    $file->getRealPath() => base_path("stubs/lang-switcher/{$file->getFilename()}"),
+                ], 'lang-switcher-stubs');
             }
         }
 
         // Testing
-        Testable::mixin(new TestsSkeleton);
+        Testable::mixin(new TestsLangSwitcher);
     }
 
     protected function getAssetPackageName(): ?string
     {
-        return ':vendor_slug/:package_slug';
+        return 'vnideas/lang-switcher';
     }
 
     /**
@@ -100,9 +108,9 @@ class SkeletonServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
         return [
-            // AlpineComponent::make('skeleton', __DIR__ . '/../resources/dist/components/skeleton.js'),
-            Css::make('skeleton-styles', __DIR__ . '/../resources/dist/skeleton.css'),
-            Js::make('skeleton-scripts', __DIR__ . '/../resources/dist/skeleton.js'),
+            // AlpineComponent::make('lang-switcher', __DIR__ . '/../resources/dist/components/lang-switcher.js'),
+//            Css::make('lang-switcher-styles', __DIR__ . '/../resources/dist/lang-switcher.css'),
+//            Js::make('lang-switcher-scripts', __DIR__ . '/../resources/dist/lang-switcher.js'),
         ];
     }
 
@@ -112,7 +120,7 @@ class SkeletonServiceProvider extends PackageServiceProvider
     protected function getCommands(): array
     {
         return [
-            SkeletonCommand::class,
+            LangSwitcherCommand::class,
         ];
     }
 
@@ -146,7 +154,7 @@ class SkeletonServiceProvider extends PackageServiceProvider
     protected function getMigrations(): array
     {
         return [
-            'create_skeleton_table',
+            'create_lang-switcher_table',
         ];
     }
 }
